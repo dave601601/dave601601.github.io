@@ -248,9 +248,9 @@
       app.innerHTML = `
         <div class="detail">
           <button class="back" onclick="location.hash=''">← Back to projects</button>
+          ${renderVideo(project.video)}
           <h2>${escapeHtml(project.title)}</h2>
           <div class="period">${escapeHtml(project.period || "")}</div>
-          ${renderVideo(project.video)}
           <div class="description">${renderParagraphs(project.description || "")}</div>
         </div>
       `;
