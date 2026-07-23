@@ -1,17 +1,96 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>dave601601</title>
+  <title>dave601601 — Projects</title>
+
+  <!-- ============================================================
+       EDIT YOUR PROJECTS HERE
+       Each project is one object. Add / remove / edit freely.
+       - id:        unique slug used in the URL (#/my-project)
+       - title:     shown on the card and detail page
+       - year:      shown as a small label
+       - tagline:   one-line summary shown on the card
+       - tags:      array of short keywords / tech stack
+       - overview:  short paragraph shown at top of detail page
+       - sections:  array of { heading, body } blocks (details)
+       - links:     array of { label, url } buttons
+       ============================================================ -->
+  <script>
+    const projects = [
+      {
+        id: "project-one",
+        title: "Project One",
+        year: "2026",
+        tagline: "A short one-line description of what this project does.",
+        tags: ["React", "TypeScript", "Node.js"],
+        overview:
+          "Give a paragraph of context here — what problem it solves, who it is for, and the result you achieved.",
+        sections: [
+          {
+            heading: "What I built",
+            body: "Describe the main features and what you were responsible for.",
+          },
+          {
+            heading: "Tech & approach",
+            body: "Explain the stack, architecture, or any interesting technical decisions.",
+          },
+          {
+            heading: "Outcome",
+            body: "Results, metrics, lessons learned, or what you'd do next.",
+          },
+        ],
+        links: [
+          { label: "GitHub", url: "https://github.com/dave601601" },
+          { label: "Live demo", url: "#" },
+        ],
+      },
+      {
+        id: "project-two",
+        title: "Project Two",
+        year: "2025",
+        tagline: "Another one-line summary of a project you worked on.",
+        tags: ["Python", "FastAPI", "PostgreSQL"],
+        overview:
+          "Replace this with a short overview of the second project.",
+        sections: [
+          { heading: "What I built", body: "Details go here." },
+          { heading: "Tech & approach", body: "Details go here." },
+        ],
+        links: [{ label: "GitHub", url: "https://github.com/dave601601" }],
+      },
+      {
+        id: "project-three",
+        title: "Project Three",
+        year: "2025",
+        tagline: "A third project card — duplicate this block to add more.",
+        tags: ["Design", "Figma"],
+        overview: "Replace this with a short overview of the third project.",
+        sections: [{ heading: "What I built", body: "Details go here." }],
+        links: [],
+      },
+    ];
+
+    // Edit your name / intro here
+    const profile = {
+      name: "dave601601",
+      intro: "Hi 👋 Here are some of the projects I've worked on.",
+      github: "https://github.com/dave601601",
+    };
+  </script>
+
   <style>
     :root {
       --bg: #ffffff;
       --fg: #1a1a1a;
-      --muted: #666;
+      --muted: #6b7280;
       --accent: #2563eb;
-      --card: #f5f5f5;
-      --border: #e5e5e5;
+      --card: #f7f7f8;
+      --card-hover: #eef0f3;
+      --border: #e5e7eb;
+      --tag-bg: #eef2ff;
+      --tag-fg: #4338ca;
     }
     @media (prefers-color-scheme: dark) {
       :root {
@@ -20,43 +99,107 @@
         --muted: #8b949e;
         --accent: #58a6ff;
         --card: #161b22;
+        --card-hover: #1c232c;
         --border: #30363d;
+        --tag-bg: #1f2937;
+        --tag-fg: #93c5fd;
       }
     }
     * { box-sizing: border-box; }
     body {
       margin: 0;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-        "Helvetica Neue", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+        "Helvetica Neue", Arial, sans-serif;
       background: var(--bg);
       color: var(--fg);
       line-height: 1.6;
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 24px;
     }
-    main {
-      max-width: 640px;
-      width: 100%;
+    .wrap {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 48px 24px 80px;
     }
-    h1 {
-      font-size: clamp(2rem, 6vw, 3rem);
-      margin: 0 0 8px;
+
+    /* Header */
+    header h1 {
+      font-size: clamp(1.8rem, 5vw, 2.6rem);
+      margin: 0 0 6px;
       letter-spacing: -0.02em;
     }
-    .tagline {
-      color: var(--muted);
-      font-size: 1.1rem;
-      margin: 0 0 32px;
+    header p { color: var(--muted); margin: 0 0 8px; font-size: 1.05rem; }
+    header a.gh { color: var(--accent); text-decoration: none; font-size: 0.95rem; }
+    header a.gh:hover { text-decoration: underline; }
+
+    /* Overview grid */
+    .grid {
+      margin-top: 40px;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 16px;
     }
-    .links {
+    .card {
+      text-align: left;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 20px;
+      cursor: pointer;
+      font: inherit;
+      color: inherit;
+      transition: background 0.15s, border-color 0.15s, transform 0.08s;
+    }
+    .card:hover { background: var(--card-hover); border-color: var(--accent); }
+    .card:active { transform: translateY(1px); }
+    .card .year { font-size: 0.8rem; color: var(--muted); }
+    .card h3 { margin: 4px 0 8px; font-size: 1.2rem; }
+    .card .tagline { color: var(--muted); font-size: 0.95rem; margin: 0 0 14px; }
+
+    .tags { display: flex; flex-wrap: wrap; gap: 6px; }
+    .tag {
+      font-size: 0.75rem;
+      padding: 3px 9px;
+      border-radius: 999px;
+      background: var(--tag-bg);
+      color: var(--tag-fg);
+    }
+
+    /* Detail view */
+    .back {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: none;
+      border: none;
+      color: var(--accent);
+      font: inherit;
+      cursor: pointer;
+      padding: 0;
+      margin-bottom: 28px;
+    }
+    .back:hover { text-decoration: underline; }
+    .detail h2 {
+      font-size: clamp(1.6rem, 4vw, 2.2rem);
+      margin: 0 0 4px;
+      letter-spacing: -0.02em;
+    }
+    .detail .year { color: var(--muted); font-size: 0.9rem; }
+    .detail .overview {
+      font-size: 1.1rem;
+      margin: 18px 0 24px;
+    }
+    .detail section { margin: 24px 0; }
+    .detail section h4 {
+      font-size: 1.1rem;
+      margin: 0 0 6px;
+    }
+    .detail section p { margin: 0; color: var(--fg); }
+    .detail .links {
       display: flex;
       flex-wrap: wrap;
       gap: 12px;
+      margin-top: 28px;
     }
-    a.btn {
+    .btn {
       display: inline-block;
       padding: 10px 18px;
       border: 1px solid var(--border);
@@ -65,28 +208,93 @@
       color: var(--fg);
       text-decoration: none;
       font-weight: 500;
-      transition: border-color 0.15s, transform 0.05s;
     }
-    a.btn:hover { border-color: var(--accent); }
-    a.btn:active { transform: translateY(1px); }
+    .btn:hover { border-color: var(--accent); }
+
     footer {
-      margin-top: 40px;
+      margin-top: 64px;
       color: var(--muted);
       font-size: 0.85rem;
     }
+    a { color: var(--accent); }
   </style>
 </head>
 <body>
-  <main>
-    <h1>안녕하세요 👋</h1>
-    <p class="tagline">여기는 제 개인 페이지입니다.</p>
+  <div class="wrap" id="app"></div>
 
-    <div class="links">
-      <a class="btn" href="https://github.com/dave601601">GitHub</a>
-      <a class="btn" href="mailto:bsn012944@gmail.com">Email</a>
-    </div>
+  <script>
+    const app = document.getElementById("app");
 
-    <footer>© 2026 dave601601</footer>
-  </main>
+    function escapeHtml(s) {
+      return String(s).replace(/[&<>"']/g, (c) => ({
+        "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;",
+      }[c]));
+    }
+
+    function renderOverview() {
+      const cards = projects.map((p) => `
+        <button class="card" onclick="location.hash='#/${p.id}'">
+          <div class="year">${escapeHtml(p.year || "")}</div>
+          <h3>${escapeHtml(p.title)}</h3>
+          <p class="tagline">${escapeHtml(p.tagline || "")}</p>
+          <div class="tags">
+            ${(p.tags || []).map((t) => `<span class="tag">${escapeHtml(t)}</span>`).join("")}
+          </div>
+        </button>
+      `).join("");
+
+      app.innerHTML = `
+        <header>
+          <h1>${escapeHtml(profile.name)}</h1>
+          <p>${escapeHtml(profile.intro)}</p>
+          <a class="gh" href="${escapeHtml(profile.github)}">GitHub →</a>
+        </header>
+        <div class="grid">${cards}</div>
+        <footer>© 2026 ${escapeHtml(profile.name)}</footer>
+      `;
+      window.scrollTo(0, 0);
+    }
+
+    function renderDetail(project) {
+      const sections = (project.sections || []).map((s) => `
+        <section>
+          <h4>${escapeHtml(s.heading)}</h4>
+          <p>${escapeHtml(s.body)}</p>
+        </section>
+      `).join("");
+
+      const links = (project.links || []).map((l) => `
+        <a class="btn" href="${escapeHtml(l.url)}">${escapeHtml(l.label)}</a>
+      `).join("");
+
+      app.innerHTML = `
+        <div class="detail">
+          <button class="back" onclick="location.hash=''">← Back to projects</button>
+          <div class="year">${escapeHtml(project.year || "")}</div>
+          <h2>${escapeHtml(project.title)}</h2>
+          <p class="overview">${escapeHtml(project.overview || "")}</p>
+          <div class="tags">
+            ${(project.tags || []).map((t) => `<span class="tag">${escapeHtml(t)}</span>`).join("")}
+          </div>
+          ${sections}
+          ${links ? `<div class="links">${links}</div>` : ""}
+        </div>
+      `;
+      window.scrollTo(0, 0);
+    }
+
+    function router() {
+      const id = location.hash.replace(/^#\/?/, "");
+      const project = projects.find((p) => p.id === id);
+      if (project) {
+        renderDetail(project);
+      } else {
+        renderOverview();
+      }
+    }
+
+    window.addEventListener("hashchange", router);
+    router();
+  </script>
 </body>
 </html>
