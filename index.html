@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>dave601601 — Projects</title>
+  <title>Dongha Gwak — Projects</title>
 
   <!-- ============================================================
        EDIT YOUR PROJECTS HERE
@@ -11,7 +11,12 @@
        - id:          unique slug used in the URL (#/project-1)
        - title:       project title
        - period:      the time span, e.g. "Jan 2026 – Mar 2026"
-       - tagline:     one-line summary shown on the overview card
+       - tagline:     one-line summary shown on the card
+       - thumbnail:   pick the card image:
+                        • "youtube"        -> the demo video's YouTube thumbnail
+                        • "thumbs/p1.jpg"  -> your own image file
+                      A custom image that fails to load falls back to the
+                      YouTube thumbnail automatically.
        - video:       demo video. Either
                         • a YouTube link  ("https://youtu.be/XXXX"), or
                         • a video file in this repo ("demo.mp4")
@@ -22,21 +27,24 @@
   <script>
     const projects = [
       {
-        id: "project-1",
-        title: "Project 1 — Title goes here",
-        period: "Period goes here (e.g. Jan 2026 – Mar 2026)",
-        tagline: "One-line summary shown on the card.",
-        video: "https://youtu.be/jNQXAC9IVRw",
+        id: "shopping-robot",
+        title: "Agentic Autonomous Shopping Robot",
+        period: "Mar 2026 – Jun 2026",
+        tagline: "A mobile manipulator that reads a shopping list, finds the right stores, and brings the items back.",
+        thumbnail: "youtube", // "youtube" or an image path like "thumbs/p1.jpg"
+        video: "https://youtu.be/TZa5F_IZG0c",
         description:
-          "Write the detailed description of Project 1 here. " +
-          "Explain the problem, what you built, the tech stack, your role, and the result.\n\n" +
-          "Add another paragraph like this by separating with a blank line.",
+          "Hand a robot a sentence like \"one iced coffee, two burgers, and some vitamins\" and it has to work out everything else: which storefront sells what, how to get there without scraping a wall, how to lift a small object off a table with a short arm, and what to do when any of that goes wrong. That was our term project for EE40078, Introduction to Multi-disciplinary Robotics, at KAIST: a mock shopping mall built out of AprilTag labeled storefronts, and a wheeled robot with an arm that had to shop in it.\n\n" +
+          "The team stack runs on ROS. An LLM turns the free text request into a structured shopping list and chooses the next store to visit, a graph search plans the route through the mall, a control space sampling local planner drives the robot there, and a YOLO and depth pipeline feeds inverse kinematics for the grasp. A mission state machine gates all of it, so navigation only publishes while the robot is driving and the arm only moves while it is grasping.\n\n" +
+          "I owned the SLAM package, which covers everything the robot needs in order to answer where it is. That meant RGB-D SLAM on the depth camera, an AprilTag based global localizer that solves the transform between the SLAM frame and the fixed room frame, a YOLO pose model that turns printed storefront signs into landmarks so the robot still has an anchor when no tag is in view, and a localization manager that arbitrates between those pose sources and rejects corrections the robot could not physically have moved through. Much of the real work was less glamorous than that list suggests: chasing camera bandwidth limits on the embedded board, fixing a field of view mismatch between the color and depth streams, and sweeping visual odometry recovery settings against recorded runs until tracking survived a full lap of the arena.\n\n" +
+          "The lesson that stuck was to treat failure as a normal execution state rather than a terminal error. A blocked path backs off, marks the destination, and replans. A failed grasp retries or moves on. A bad depth reading is rejected before it ever reaches the arm. Robust autonomous mobile manipulation turned out to be a coordinated, recovery oriented system rather than a collection of independent demos.",
       },
       {
         id: "project-2",
         title: "Project 2 — Title goes here",
-        period: "Period goes here (e.g. May 2025 – Dec 2025)",
+        period: "May 2025 – Dec 2025",
         tagline: "One-line summary shown on the card.",
+        thumbnail: "youtube", // "youtube" or an image path like "thumbs/p2.jpg"
         video: "https://youtu.be/jNQXAC9IVRw",
         description:
           "Write the detailed description of Project 2 here. " +
@@ -47,8 +55,8 @@
 
     // Edit your name / intro here
     const profile = {
-      name: "dave601601",
-      intro: "Hi 👋 Here are some of the projects I've worked on.",
+      name: "Dongha Gwak",
+      intro: "Here are some of the projects I've worked on.",
       github: "https://github.com/dave601601",
     };
   </script>
@@ -61,25 +69,27 @@
       --muted: rgba(55, 53, 47, 0.65);
       --faint: rgba(55, 53, 47, 0.4);
       --accent: rgb(35, 131, 226);
-      --card: #ffffff;
-      --card-hover: rgba(55, 53, 47, 0.03);
+      --hover: rgba(55, 53, 47, 0.04);
+      --card-bg: #ffffff;
+      --card-hover-bg: rgb(247, 247, 245);
+      --divider: rgba(55, 53, 47, 0.09);
       --card-shadow: rgba(15, 15, 15, 0.1) 0px 0px 0px 1px,
         rgba(15, 15, 15, 0.1) 0px 2px 4px;
-      --divider: rgba(55, 53, 47, 0.09);
       --placeholder-bg: rgba(55, 53, 47, 0.03);
     }
     @media (prefers-color-scheme: dark) {
       :root {
         --bg: rgb(25, 25, 25);
         --fg: rgba(255, 255, 255, 0.81);
-        --muted: rgba(255, 255, 255, 0.44);
-        --faint: rgba(255, 255, 255, 0.28);
+        --muted: rgba(255, 255, 255, 0.46);
+        --faint: rgba(255, 255, 255, 0.3);
         --accent: rgb(82, 156, 231);
-        --card: rgb(32, 32, 32);
-        --card-hover: rgba(255, 255, 255, 0.055);
+        --hover: rgba(255, 255, 255, 0.055);
+        --card-bg: rgb(32, 32, 32);
+        --card-hover-bg: rgb(37, 37, 37);
+        --divider: rgba(255, 255, 255, 0.13);
         --card-shadow: rgba(255, 255, 255, 0.094) 0px 0px 0px 1px,
           rgba(15, 15, 15, 0.3) 0px 2px 4px;
-        --divider: rgba(255, 255, 255, 0.13);
         --placeholder-bg: rgba(255, 255, 255, 0.03);
       }
     }
@@ -97,48 +107,84 @@
     .wrap {
       max-width: 720px;
       margin: 0 auto;
-      padding: 72px 40px 96px;
+      padding: 64px 40px 120px;
     }
     @media (max-width: 600px) {
-      .wrap { padding: 40px 22px 72px; }
+      .wrap { padding: 40px 22px 80px; }
     }
 
-    /* Header — Notion page title */
-    header { margin-bottom: 8px; }
-    header h1 {
+    h1 {
       font-size: 2.5rem;
       font-weight: 700;
-      margin: 0 0 10px;
-      letter-spacing: -0.01em;
+      margin: 0 0 8px;
+      letter-spacing: -0.015em;
       line-height: 1.2;
     }
-    header p { color: var(--muted); margin: 0 0 10px; font-size: 1rem; }
-    header a.gh { color: var(--accent); text-decoration: none; font-size: 0.95rem; }
-    header a.gh:hover { text-decoration: underline; }
+    .intro { color: var(--muted); margin: 0 0 6px; font-size: 1rem; }
+    .intro a { color: var(--accent); text-decoration: none; }
+    .intro a:hover { text-decoration: underline; }
 
-    /* Overview — Notion gallery cards */
+    /* Notion database — gallery cards */
+    .db-label {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin: 44px 0 16px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--muted);
+    }
     .grid {
-      margin-top: 36px;
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-      gap: 14px;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 18px;
     }
     .card {
+      display: flex;
+      flex-direction: column;
       text-align: left;
-      background: var(--card);
+      background: var(--card-bg);
       border: none;
-      border-radius: 8px;
+      border-radius: 12px;
       box-shadow: var(--card-shadow);
-      padding: 16px 16px 18px;
+      padding: 0;
+      overflow: hidden;
       cursor: pointer;
       font: inherit;
       color: inherit;
-      transition: background 0.12s ease;
+      transition: background 0.12s ease, transform 0.08s ease;
     }
-    .card:hover { background: var(--card-hover); }
-    .card .period { font-size: 0.78rem; color: var(--faint); }
-    .card h3 { margin: 6px 0 6px; font-size: 1.05rem; font-weight: 600; }
-    .card .tagline { color: var(--muted); font-size: 0.9rem; margin: 0; }
+    .card:hover { background: var(--card-hover-bg); }
+    .card:active { transform: translateY(1px); }
+    .c-thumb {
+      display: block;
+      aspect-ratio: 16 / 9;
+      background: var(--placeholder-bg);
+      overflow: hidden;
+      border-bottom: 1px solid var(--divider);
+    }
+    .c-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .c-thumb.empty {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--faint);
+      font-size: 0.85rem;
+    }
+    .c-body {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      padding: 16px 20px 20px;
+    }
+    .card .c-title { font-size: 1.15rem; font-weight: 600; margin-bottom: 6px; }
+    .card .c-tagline { font-size: 0.92rem; color: var(--muted); }
+    .card .c-period {
+      margin-top: auto;
+      padding-top: 16px;
+      font-size: 0.8rem;
+      color: var(--faint);
+    }
 
     /* Detail view */
     .back {
@@ -152,25 +198,43 @@
       font-size: 0.9rem;
       cursor: pointer;
       padding: 4px 8px;
-      margin: 0 0 28px -8px;
+      margin: 0 0 32px -8px;
       border-radius: 6px;
-      transition: background 0.12s ease;
+      transition: background 0.1s ease;
     }
-    .back:hover { background: var(--card-hover); color: var(--fg); }
+    .back:hover { background: var(--hover); color: var(--fg); }
     .detail h2 {
-      font-size: 2rem;
+      font-size: 2.1rem;
       font-weight: 700;
-      margin: 0 0 6px;
-      letter-spacing: -0.01em;
-      line-height: 1.25;
+      margin: 0 0 14px;
+      letter-spacing: -0.015em;
+      line-height: 1.22;
     }
-    .detail .period { color: var(--muted); font-size: 0.95rem; margin-bottom: 4px; }
-    .detail .description {
-      margin-top: 24px;
-      padding-top: 24px;
+    /* Notion property rows */
+    .props { margin-bottom: 28px; }
+    .prop-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.9rem;
+      padding: 5px 0;
+    }
+    .prop-row .k {
+      width: 120px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      color: var(--faint);
+    }
+    .prop-row .v { color: var(--fg); }
+
+    .description {
+      margin-top: 8px;
+      padding-top: 26px;
       border-top: 1px solid var(--divider);
     }
-    .detail .description p { margin: 0 0 16px; font-size: 1rem; }
+    .description p { margin: 0 0 16px; font-size: 1rem; }
 
     /* Demo video (responsive 16:9) */
     .video {
@@ -180,7 +244,7 @@
       overflow: hidden;
       background: #000;
       box-shadow: var(--card-shadow);
-      margin: 8px 0 4px;
+      margin: 4px 0 26px;
     }
     .video iframe, .video video {
       position: absolute;
@@ -198,14 +262,8 @@
       border-radius: 8px;
       color: var(--faint);
       background: var(--placeholder-bg);
-      margin: 8px 0 4px;
+      margin: 4px 0 26px;
       font-size: 0.9rem;
-    }
-
-    footer {
-      margin-top: 72px;
-      color: var(--faint);
-      font-size: 0.82rem;
     }
     a { color: var(--accent); }
   </style>
@@ -222,7 +280,6 @@
       }[c]));
     }
 
-    // Turn "\n\n"-separated text into <p> paragraphs
     function renderParagraphs(text) {
       return String(text)
         .split(/\n\s*\n/)
@@ -230,44 +287,85 @@
         .join("");
     }
 
-    function youtubeEmbed(url) {
-      const m = url.match(
+    function youtubeId(url) {
+      const m = String(url).match(
         /(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([\w-]+)/
       );
-      return m ? `https://www.youtube.com/embed/${m[1]}` : null;
+      return m ? m[1] : null;
+    }
+
+    function youtubeEmbed(url) {
+      const id = youtubeId(url);
+      return id ? `https://www.youtube.com/embed/${id}` : null;
+    }
+
+    // Ordered list of image URLs to try for a card thumbnail.
+    //   thumbnail: "youtube" (or empty) -> use the demo video's YouTube image
+    //   thumbnail: "path.jpg"           -> use that image, falling back to
+    //                                      the YouTube image if it fails.
+    function thumbChain(p) {
+      const id = youtubeId(p.video);
+      const yt = id
+        ? [
+            `https://img.youtube.com/vi/${id}/maxresdefault.jpg`,
+            `https://img.youtube.com/vi/${id}/hqdefault.jpg`,
+          ]
+        : [];
+      const useYoutube = !p.thumbnail || p.thumbnail === "youtube";
+      return useYoutube ? yt : [p.thumbnail, ...yt];
+    }
+
+    // Load the next fallback image when the current one fails.
+    function nextThumb(img) {
+      const list = (img.getAttribute("data-fallback") || "")
+        .split("|")
+        .filter(Boolean);
+      if (!list.length) {
+        const box = img.parentElement;
+        box.classList.add("empty");
+        box.textContent = "No preview";
+        return;
+      }
+      img.setAttribute("data-fallback", list.slice(1).join("|"));
+      img.src = list[0];
     }
 
     function renderVideo(video) {
-      // Not filled in yet → show an empty placeholder box
       if (!video || /PASTE_|_HERE/.test(video)) {
-        return `<div class="video-placeholder">🎬 Demo video goes here</div>`;
+        return `<div class="video-placeholder">Demo video goes here</div>`;
       }
       const yt = youtubeEmbed(video);
       if (yt) {
         return `<div class="video"><iframe src="${yt}" allowfullscreen
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe></div>`;
       }
-      // Otherwise treat it as a direct video file (e.g. demo.mp4)
       return `<div class="video"><video src="${escapeHtml(video)}" controls playsinline></video></div>`;
     }
 
     function renderOverview() {
-      const cards = projects.map((p) => `
+      const cards = projects.map((p) => {
+        const chain = thumbChain(p);
+        const cover = chain.length
+          ? `<span class="c-thumb"><img src="${escapeHtml(chain[0])}" alt="" loading="lazy"
+               data-fallback="${escapeHtml(chain.slice(1).join("|"))}" onerror="nextThumb(this)"></span>`
+          : `<span class="c-thumb empty">No preview</span>`;
+        return `
         <button class="card" onclick="location.hash='#/${p.id}'">
-          <div class="period">${escapeHtml(p.period || "")}</div>
-          <h3>${escapeHtml(p.title)}</h3>
-          <p class="tagline">${escapeHtml(p.tagline || "")}</p>
-        </button>
-      `).join("");
+          ${cover}
+          <span class="c-body">
+            <span class="c-title">${escapeHtml(p.title)}</span>
+            <span class="c-tagline">${escapeHtml(p.tagline || "")}</span>
+            <span class="c-period">${escapeHtml(p.period || "")}</span>
+          </span>
+        </button>`;
+      }).join("");
 
       app.innerHTML = `
-        <header>
-          <h1>${escapeHtml(profile.name)}</h1>
-          <p>${escapeHtml(profile.intro)}</p>
-          <a class="gh" href="${escapeHtml(profile.github)}">GitHub →</a>
-        </header>
+        <h1>${escapeHtml(profile.name)}</h1>
+        <p class="intro">${escapeHtml(profile.intro)}
+          &nbsp;·&nbsp; <a href="${escapeHtml(profile.github)}">GitHub</a></p>
+        <div class="db-label">Projects</div>
         <div class="grid">${cards}</div>
-        <footer>© 2026 ${escapeHtml(profile.name)}</footer>
       `;
       window.scrollTo(0, 0);
     }
@@ -275,10 +373,15 @@
     function renderDetail(project) {
       app.innerHTML = `
         <div class="detail">
-          <button class="back" onclick="location.hash=''">← Back to projects</button>
-          ${renderVideo(project.video)}
+          <button class="back" onclick="location.hash=''">← Projects</button>
           <h2>${escapeHtml(project.title)}</h2>
-          <div class="period">${escapeHtml(project.period || "")}</div>
+          <div class="props">
+            <div class="prop-row">
+              <span class="k">Period</span>
+              <span class="v">${escapeHtml(project.period || "—")}</span>
+            </div>
+          </div>
+          ${renderVideo(project.video)}
           <div class="description">${renderParagraphs(project.description || "")}</div>
         </div>
       `;
