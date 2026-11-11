@@ -18,9 +18,9 @@
        ============================================================ -->
   <script>
     const demo = {
-      title: "Poster title goes here",
-      caption: "Short caption for the demo video.",
-      video: "PASTE_VIDEO_HERE",
+      title: "조향 제어 없는 자전거의 균형 유지",
+      caption: "",
+      video: "https://youtube.com/shorts/aWODIxC7IBo",
     };
   </script>
 
@@ -95,6 +95,13 @@
       height: 100%;
       border: 0;
     }
+    /* YouTube Shorts are vertical */
+    .video.short {
+      padding-top: 0;
+      aspect-ratio: 9 / 16;
+      max-width: 360px;
+      margin: 0 auto;
+    }
     .video-placeholder {
       display: flex;
       align-items: center;
@@ -140,7 +147,8 @@
       }
       const yt = youtubeEmbed(video);
       if (yt) {
-        return `<div class="video"><iframe src="${yt}" allowfullscreen
+        const cls = /\/shorts\//.test(video) ? "video short" : "video";
+        return `<div class="${cls}"><iframe src="${yt}" allowfullscreen
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe></div>`;
       }
       return `<div class="video"><video src="${escapeHtml(video)}" controls playsinline preload="metadata"></video></div>`;
