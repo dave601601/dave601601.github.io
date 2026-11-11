@@ -11,7 +11,8 @@
        EDIT HERE
        - title:   poster / project title
        - caption: one or two lines under the video
-       - photos:  labelled pictures shown under the video
+       - sims:    simulation clips shown under the video
+       - photos:  labelled pictures shown under the clips
        - parts:   one row per part in the list under the pictures
        - video:   either
                     • a YouTube link  ("https://youtu.be/XXXX"), or
@@ -23,6 +24,11 @@
       title: "조향 제어 없는 자전거의 균형 유지",
       caption: "",
       video: "https://youtube.com/shorts/aWODIxC7IBo",
+      simIntro: "아래는 실제 자전거가 아니라 컴퓨터 시뮬레이션 영상입니다. 노란 공은 자전거에 실린 짐이고, 빨간 상자가 좌우로 움직이는 무게추입니다. 기둥은 자전거가 움직이는 모습이 잘 보이도록 세운 표시이며 자전거와 부딪히지 않습니다.",
+      sims: [
+        { src: "sim_turn30.mp4", caption: "초속 1.5 m로 달리면서 30도 방향을 트는 모습" },
+        { src: "sim_standstart.mp4", caption: "멈춘 상태에서 출발해 균형을 잡는 모습" },
+      ],
       intro: "사람이 손을 놓고 탈 때 몸을 움직여 균형을 잡듯, 이 자전거는 무게추를 좌우로 움직여 균형을 잡습니다.",
       photos: [
         { src: "parts_side.jpg", caption: "옆에서 본 모습", alt: "옆에서 찍은 자전거 사진. 배터리 두 개, 앞 포크, 뒷바퀴 모터, 제어 보드, 무게추 장치에 이름표가 붙어 있다." },
@@ -266,6 +272,16 @@
       </svg>`;
     }
 
+    function renderSims(d) {
+      return `
+        <h2>시뮬레이션</h2>
+        <p>${escapeHtml(d.simIntro)}</p>
+        ${d.sims.map((v) => `<figure>
+          ${renderVideo(v.src)}
+          <figcaption>${escapeHtml(v.caption)}</figcaption>
+        </figure>`).join("")}`;
+    }
+
     function renderParts(d) {
       return `
         <h2>자전거에 달린 부품</h2>
@@ -292,6 +308,7 @@
       <h1>${escapeHtml(demo.title)}</h1>
       ${renderVideo(demo.video)}
       ${demo.caption ? `<p class="caption">${escapeHtml(demo.caption)}</p>` : ""}
+      ${renderSims(demo)}
       ${renderParts(demo)}
       <div class="more"><a href="/">More projects →</a></div>
     `;
