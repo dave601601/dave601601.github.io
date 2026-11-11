@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -11,6 +11,8 @@
        EDIT HERE
        - title:   poster / project title
        - caption: one or two lines under the video
+       - photos:  labelled pictures shown under the video
+       - parts:   one row per part in the list under the pictures
        - video:   either
                     • a YouTube link  ("https://youtu.be/XXXX"), or
                     • a video file next to this page ("demo.mp4")
@@ -21,6 +23,28 @@
       title: "조향 제어 없는 자전거의 균형 유지",
       caption: "",
       video: "https://youtube.com/shorts/aWODIxC7IBo",
+      intro: "사람이 손을 놓고 탈 때 몸을 움직여 균형을 잡듯, 이 자전거는 무게추를 좌우로 움직여 균형을 잡습니다.",
+      photos: [
+        { src: "parts_side.jpg", caption: "옆에서 본 모습", alt: "옆에서 찍은 자전거 사진. 배터리 두 개, 앞 포크, 뒷바퀴 모터, 제어 보드, 무게추 장치에 이름표가 붙어 있다." },
+        { src: "parts_top.jpg", caption: "위에서 본 무게추 장치", alt: "위에서 찍은 무게추 장치 사진. 무게추, 레일, 벨트, 풀리, 모터, 모터 컨트롤러 두 개에 이름표가 붙어 있다." },
+      ],
+      parts: [
+        { name: "무게추", model: "납 2 kg", desc: "레일 위를 좌우로 움직이며 자전거가 넘어지지 않게 합니다. 받침을 포함해 움직이는 부분은 약 2.5 kg입니다." },
+        { name: "레일, 벨트, 풀리", desc: "레일은 무게추가 곧게 움직이도록 잡아 주고, 톱니가 있는 벨트는 모터의 회전을 좌우 움직임으로 바꿉니다. 풀리는 벨트를 걸어 돌리는 바퀴입니다." },
+        { name: "무게추 모터", model: "BDUAV 5065-140KV", desc: "벨트를 돌려 무게추를 움직입니다." },
+        { name: "앞 포크", desc: "핸들을 돌리는 모터가 없어서, 앞바퀴는 자전거가 기우는 대로 스스로 돌아갑니다." },
+        { name: "뒷바퀴 허브 모터", desc: "바퀴 한가운데 들어 있는 모터로, 자전거를 앞으로 나아가게 합니다." },
+        { name: "모터 컨트롤러 2개", model: "VESC", desc: "제어 보드의 명령대로 배터리 전기를 모터에 맞게 바꿔 보냅니다. 모터마다 하나씩 있습니다." },
+        { name: "제어 보드", model: "STM32G431", desc: "자전거의 두뇌입니다. 기울기를 읽고 모터에 내릴 명령을 계산합니다." },
+        { name: "기울기 센서", model: "EBIMU", desc: "자전거가 어느 쪽으로 얼마나 기울었고 얼마나 빨리 움직이는지 잽니다." },
+        { name: "신호 변환기", model: "SN65HVD230", desc: "제어 보드의 신호를 모터 컨트롤러들이 함께 쓰는 통신선에 맞게 바꿉니다." },
+        { name: "소형 컴퓨터", model: "Raspberry Pi 3", desc: "노트북에서 무선으로 받은 명령을 제어 보드에 전달하고, 자전거의 상태 기록을 받습니다." },
+        { name: "배터리 2개", desc: "무게추 모터용 6셀(약 24 V)과 뒷바퀴 모터용 12셀(약 51 V)을 따로 씁니다." },
+      ],
+      wiringNotes: [
+        "제어 보드는 뒷바퀴 쪽에서 전기를 받고, 신호 변환기는 제어 보드에서 전기를 받습니다.",
+        "두 배터리의 + 쪽은 서로 연결하지 않았습니다. 다만 신호가 제대로 전달되도록 제어 보드, 신호 변환기, 모터 컨트롤러의 전기 기준점(접지)은 하나로 묶었습니다.",
+      ],
     };
   </script>
 
@@ -35,6 +59,7 @@
       --card-shadow: rgba(15, 15, 15, 0.1) 0px 0px 0px 1px,
         rgba(15, 15, 15, 0.1) 0px 2px 4px;
       --placeholder-bg: rgba(55, 53, 47, 0.03);
+      --power: rgb(214, 28, 40);
     }
     @media (prefers-color-scheme: dark) {
       :root {
@@ -47,6 +72,7 @@
         --card-shadow: rgba(255, 255, 255, 0.094) 0px 0px 0px 1px,
           rgba(15, 15, 15, 0.3) 0px 2px 4px;
         --placeholder-bg: rgba(255, 255, 255, 0.03);
+        --power: rgb(240, 96, 96);
       }
     }
     * { box-sizing: border-box; }
@@ -58,6 +84,7 @@
       background: var(--bg);
       color: var(--fg);
       line-height: 1.65;
+      word-break: keep-all;
       -webkit-font-smoothing: antialiased;
     }
     .wrap {
@@ -114,6 +141,48 @@
       font-size: 0.9rem;
     }
     .caption { color: var(--muted); margin: 16px 0 0; font-size: 0.95rem; }
+    h2 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin: 40px 0 12px;
+      letter-spacing: -0.01em;
+    }
+    figure { margin: 20px 0 0; }
+    figure img {
+      display: block;
+      width: 100%;
+      height: auto;
+      border-radius: 8px;
+      box-shadow: var(--card-shadow);
+    }
+    figcaption { color: var(--muted); margin-top: 8px; font-size: 0.9rem; }
+    .parts { margin: 24px 0 0; }
+    .parts > div {
+      display: grid;
+      grid-template-columns: 200px 1fr;
+      gap: 2px 20px;
+      padding: 12px 0;
+      border-top: 1px solid var(--divider);
+    }
+    .parts dt { font-weight: 600; }
+    .parts dt small { display: block; color: var(--muted); font-weight: 400; font-size: 0.82rem; }
+    .parts dd { margin: 0; }
+    @media (max-width: 600px) {
+      .parts > div { grid-template-columns: 1fr; }
+    }
+    .wiring { display: block; width: 100%; max-width: 520px; margin: 16px auto 0; }
+    .wiring text { fill: var(--fg); font-size: 12.5px; font-weight: 600; text-anchor: middle; }
+    .wiring text.sub { fill: var(--muted); font-size: 11px; font-weight: 400; }
+    .wiring text.group { font-size: 12px; text-anchor: start; }
+    .wiring rect.box { fill: var(--bg); stroke: var(--faint); }
+    .wiring rect.frame { fill: var(--placeholder-bg); stroke: var(--divider); }
+    .wiring path { fill: none; stroke-width: 1.6; }
+    .wiring .signal { stroke: var(--accent); }
+    .wiring .power { stroke: var(--power); }
+    .legend { display: flex; justify-content: center; gap: 20px; margin-top: 8px; color: var(--muted); font-size: 0.9rem; }
+    .legend i { display: inline-block; width: 22px; height: 2px; margin-right: 6px; vertical-align: middle; }
+    .notes { margin: 16px 0 0; padding-left: 20px; }
+    .notes li + li { margin-top: 6px; }
     .more {
       margin-top: 32px;
       padding-top: 18px;
@@ -154,11 +223,76 @@
       return `<div class="video"><video src="${escapeHtml(video)}" controls playsinline preload="metadata"></video></div>`;
     }
 
+    function box(x, y, w, h, title, sub) {
+      const cx = x + w / 2;
+      return `<rect class="box" x="${x}" y="${y}" width="${w}" height="${h}" rx="6"/>
+        <text x="${cx}" y="${y + h / 2 - 3}">${title}</text>
+        <text class="sub" x="${cx}" y="${y + h / 2 + 13}">${sub}</text>`;
+    }
+
+    function wiringDiagram() {
+      const side = (x, name, ctrl, motor, motorSub, batt, battSub) => `
+        <rect class="frame" x="${x}" y="296" width="180" height="186" rx="8"/>
+        <text class="group" x="${x + 8}" y="314">${name}</text>
+        ${box(x + 8, 324, 164, 50, ctrl, "VESC")}
+        ${box(x + 8, 418, 80, 54, motor, motorSub)}
+        ${box(x + 92, 418, 80, 54, batt, battSub)}
+        <path class="power" marker-end="url(#ap)" d="M${x + 48} 374V416"/>
+        <path class="power" marker-end="url(#ap)" d="M${x + 132} 418V376"/>`;
+      return `<svg class="wiring" viewBox="0 0 400 490" role="img"
+        aria-label="부품 연결도. 노트북, 소형 컴퓨터, 제어 보드, 신호 변환기가 차례로 이어지고, 공용 통신선으로 모터 컨트롤러 두 개에 연결된다. 각 컨트롤러는 자기 배터리와 모터에 연결된다.">
+        <defs>
+          <marker id="as" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L8 4L0 8Z" style="fill:var(--accent);stroke:none"/></marker>
+          <marker id="ap" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L8 4L0 8Z" style="fill:var(--power);stroke:none"/></marker>
+        </defs>
+        ${box(12, 10, 140, 50, "노트북", "원격 접속")}
+        ${box(226, 10, 150, 50, "소형 컴퓨터", "Raspberry Pi 3")}
+        ${box(12, 100, 140, 50, "기울기 센서", "EBIMU")}
+        ${box(226, 100, 150, 50, "제어 보드", "STM32")}
+        ${box(226, 190, 150, 50, "신호 변환기", "SN65HVD230")}
+        <text class="sub" x="189" y="29">무선</text>
+        <path class="signal" marker-start="url(#as)" marker-end="url(#as)" d="M154 35H224"/>
+        <path class="signal" marker-end="url(#as)" d="M152 125H224"/>
+        <path class="signal" marker-start="url(#as)" marker-end="url(#as)" d="M270 62V98"/>
+        <path class="signal" marker-start="url(#as)" marker-end="url(#as)" d="M270 152V188"/>
+        <path class="power" marker-end="url(#ap)" d="M345 150V188"/>
+        <path class="signal" d="M270 240V272M100 272H300"/>
+        <text class="sub" x="175" y="266">공용 통신선</text>
+        <path class="signal" marker-end="url(#as)" d="M100 272V322"/>
+        <path class="signal" marker-end="url(#as)" d="M300 272V322"/>
+        <path class="power" marker-end="url(#ap)" d="M388 340H395V125H378"/>
+        ${side(12, "무게추 쪽", "무게추 모터 컨트롤러", "무게추 모터", "벨트로 구동", "6셀 배터리", "약 24 V")}
+        ${side(208, "뒷바퀴 쪽", "뒷바퀴 모터 컨트롤러", "허브 모터", "뒷바퀴", "12셀 배터리", "약 51 V")}
+      </svg>`;
+    }
+
+    function renderParts(d) {
+      return `
+        <h2>자전거에 달린 부품</h2>
+        <p>${escapeHtml(d.intro)}</p>
+        ${d.photos.map((p) => `<figure>
+          <a href="${escapeHtml(p.src)}"><img src="${escapeHtml(p.src)}" alt="${escapeHtml(p.alt)}" loading="lazy" width="1800" height="1350" /></a>
+          <figcaption>${escapeHtml(p.caption)}</figcaption>
+        </figure>`).join("")}
+        <dl class="parts">${d.parts.map((p) => `<div>
+          <dt>${escapeHtml(p.name)}${p.model ? `<small>${escapeHtml(p.model)}</small>` : ""}</dt>
+          <dd>${escapeHtml(p.desc)}</dd>
+        </div>`).join("")}</dl>
+        <h2>부품 연결도</h2>
+        ${wiringDiagram()}
+        <div class="legend">
+          <span><i style="background:var(--accent)"></i>신호</span>
+          <span><i style="background:var(--power)"></i>전기</span>
+        </div>
+        <ul class="notes">${d.wiringNotes.map((n) => `<li>${escapeHtml(n)}</li>`).join("")}</ul>`;
+    }
+
     document.title = demo.title;
     document.getElementById("app").innerHTML = `
       <h1>${escapeHtml(demo.title)}</h1>
       ${renderVideo(demo.video)}
       ${demo.caption ? `<p class="caption">${escapeHtml(demo.caption)}</p>` : ""}
+      ${renderParts(demo)}
       <div class="more"><a href="/">More projects →</a></div>
     `;
   </script>
